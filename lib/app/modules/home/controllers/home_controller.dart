@@ -1,12 +1,15 @@
 import 'package:get/get.dart';
+import 'package:getx_architecture/data/repository/home_repository.dart';
+
+import '../../../../data/models/home/response_model.dart';
 
 class HomeController extends GetxController {
-  //TODO: Implement HomeController
-
-  final count = 0.obs;
+  final UserRepository _userRepository = UserRepository();
+  Rx<ResponseModel?> user = Rx<ResponseModel?>(null);
   @override
   void onInit() {
     print('On Init');
+    example();
     super.onInit();
   }
 
@@ -21,5 +24,13 @@ class HomeController extends GetxController {
     super.onClose();
   }
 
-  void increment() => count.value++;
+  void example() async {
+    ResponseModel? response = await _userRepository.fetchUsers();
+    if (response != null) {
+      user.value = response;
+      print('User name: ${response.data}');
+    } else {
+      print('Failed to load data');
+    }
+  }
 }
